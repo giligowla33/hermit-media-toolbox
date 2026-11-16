@@ -15,30 +15,58 @@
 <body>
 <header><div class="wrap"><h1>🦀 寄居蟹影音工具箱</h1><p>本機影音轉換｜MP3 高音質・MP4 影片</p></div></header>
 <main>
-<section class="card"><h2>① 匯入影音檔案</h2><div class="drop" id="dropzone"><strong>選取或拖曳裝置中的影片、音訊</strong><div class="muted">支援常見影音格式；檔案只會在目前瀏覽器內處理</div><div style="margin-top:14px"><button class="btn" id="pick">選擇檔案</button></div><input id="files" type="file" accept="video/*,audio/*,.mkv,.mov,.avi,.flac,.wav,.m4a,.aac,.ogg,.webm" multiple></div><ul class="filelist" id="filelist"></ul><div class="row" style="margin-top:10px"><button class="btn secondary" id="clear" disabled>清空清單</button><span class="muted" id="count">尚未選擇檔案</span></div></section>
-<section class="card"><h2>② 貼上合法授權的直接下載網址</h2><div class="muted">僅限來源網站明確提供下載、且允許瀏覽器跨網域存取的直接影音檔案網址（HTTPS）。一般 YouTube 觀看網址、分享頁面及需要登入的連結不適用。</div><div class="urlbox" style="margin-top:12px"><input id="directUrl" type="url" inputmode="url" placeholder="https://example.com/video.mp4" autocomplete="url"><button class="btn" id="importUrl">匯入網址</button></div><label style="display:flex;gap:8px;align-items:flex-start;margin-top:12px"><input id="rightsConfirm" type="checkbox" style="margin-top:3px"><span class="muted">我確認已取得此檔案的合法下載及轉換授權。</span></label><div id="urlStatus" class="muted" role="status" aria-live="polite" style="margin-top:9px"></div></section>
+<section class="card"><h2>① 匯入影音檔案</h2><div class="drop" id="dropzone"><strong>選取或拖曳裝置中的影片、音訊</strong><div class="muted">支援常見影音格式及官方匯出的 ZIP；檔案只會在目前瀏覽器內處理</div><div style="margin-top:14px"><button class="btn" id="pick">選擇檔案</button></div><input id="files" type="file" accept="video/*,audio/*,.mkv,.mov,.avi,.flac,.wav,.m4a,.aac,.ogg,.webm,.zip" multiple></div><ul class="filelist" id="filelist"></ul><div class="row" style="margin-top:10px"><button class="btn secondary" id="clear" disabled>清空清單</button><span class="muted" id="count">尚未選擇檔案</span></div></section>
+<section class="card"><h2>② 貼上合法授權的直接下載網址</h2><div class="muted">可貼上 YouTube、Facebook、Instagram、Google Drive 或其他網站網址，工具箱會辨識來源並提供合規匯入指引。只有來源明確提供下載、且允許瀏覽器跨網域存取的 HTTPS 直接影音檔案網址，才能直接匯入。</div><div class="urlbox" style="margin-top:12px"><input id="directUrl" type="url" inputmode="url" placeholder="https://example.com/video.mp4" autocomplete="url"><button class="btn" id="importUrl">匯入網址</button></div><label style="display:flex;gap:8px;align-items:flex-start;margin-top:12px"><input id="rightsConfirm" type="checkbox" style="margin-top:3px"><span class="muted">我確認已取得此檔案的合法下載及轉換授權。</span></label><div id="urlStatus" class="muted" role="status" aria-live="polite" style="margin-top:9px"></div><div id="sourceGuide" class="notice hidden" style="margin-top:12px"></div></section>
 <section class="card"><h2>③ 選擇輸出格式</h2><div class="formats"><label class="format"><input type="radio" name="format" value="mp3" checked> <b>🎵 MP3 音訊</b><div class="muted">只保留聲音</div></label><label class="format"><input type="radio" name="format" value="mp4"> <b>🎬 MP4 影片</b><div class="muted">保留影像與聲音</div></label></div><div class="field" id="mp3settings"><label for="bitrate">MP3 音質</label><select id="bitrate"><option value="320k" selected>320 kbps（高音質）</option><option value="256k">256 kbps</option><option value="192k">192 kbps</option><option value="128k">128 kbps</option></select></div><div class="field hidden" id="mp4settings"><label for="quality">MP4 影片畫質</label><select id="quality"><option value="23">高畫質（較大檔案）</option><option value="28">一般畫質（檔案較小）</option><option value="18">極高畫質（檔案較大）</option></select></div></section>
-<section class="card"><h2>④ 開始轉換</h2><button class="btn" id="convert" disabled style="width:100%">載入轉檔引擎並開始</button><div class="progress"><div class="bar" id="bar"></div></div><div id="status">請先選擇本機檔案。第一次轉檔會下載轉檔引擎（約數十 MB），之後可重複使用。</div><ul class="filelist" id="results"></ul></section>
-<div class="notice"><b>使用與隱私提醒</b><br>本工具只處理你已合法取得且有權轉換的檔案。可選擇本機檔案、拖曳檔案，或嘗試匯入來源明確授權且允許瀏覽器跨網域存取的 HTTPS 直接檔案網址。網址匯入由你的瀏覽器直接向來源請求，不使用代理伺服器；若來源有 CORS、登入或防盜連限制，請先從來源網站手動下載。YouTube 觀看網址不提供抓取或繞過平台限制。檔案不會上傳到本工具的伺服器；轉檔引擎需從公開 CDN 載入。大型影片在手機或平板上可能因記憶體不足而失敗，建議優先使用電腦。320 kbps 不會提升低音質來源的原始音質。</div>
+<section class="card"><h2>④ 開始轉換</h2><button class="btn" id="convert" disabled style="width:100%">載入轉檔引擎並開始</button><div class="progress"><div class="bar" id="bar"></div></div><div id="status">請先選擇影音檔案，或匯入 ZIP 後挑選其中的影音。第一次轉檔會下載轉檔引擎（約數十 MB）。</div><ul class="filelist" id="results"></ul></section>
+<div class="notice"><b>使用與隱私提醒</b><br>本工具只處理你已合法取得且有權轉換的檔案。可選擇本機檔案、拖曳檔案、匯入官方資料匯出 ZIP，或嘗試匯入來源明確授權且允許瀏覽器跨網域存取的 HTTPS 直接檔案網址。網址匯入由你的瀏覽器直接向來源請求，不使用代理伺服器；若來源有 CORS、登入或防盜連限制，請先從來源網站手動下載。YouTube 觀看網址不提供抓取或繞過平台限制。檔案不會上傳到本工具的伺服器；轉檔引擎需從公開 CDN 載入。大型影片在手機或平板上可能因記憶體不足而失敗，建議優先使用電腦。320 kbps 不會提升低音質來源的原始音質。</div>
 </main><footer>寄居蟹影音工具箱 · PWA 網頁版 · 需要網路載入轉檔引擎</footer>
 <script type="module">
 import { FFmpeg } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js";
 import { fetchFile, toBlobURL } from "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm/index.js";
 const $=id=>document.getElementById(id),picker=$("files");let selected=[],ffmpeg=null,enginePromise=null;
-function addFiles(files){selected=[...selected,...Array.from(files||[])];selected=selected.filter((f,i,a)=>a.findIndex(x=>x.name===f.name&&x.size===f.size)===i);renderFiles()}
+async function addFiles(files){
+ const incoming=Array.from(files||[]),plain=[],archives=incoming.filter(f=>/\.zip$/i.test(f.name));
+ plain.push(...incoming.filter(f=>!/\.zip$/i.test(f.name)));
+ for(const zipFile of archives){
+  setStatus("正在讀取 ZIP 壓縮檔："+zipFile.name);
+  try{
+   const {default:JSZip}=await import("https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm");
+   const zip=await JSZip.loadAsync(zipFile);let total=0,found=0;
+   for(const [path,entry] of Object.entries(zip.files)){
+    if(entry.dir||! /\.(mp4|m4v|mov|mkv|avi|webm|mp3|m4a|aac|wav|flac|ogg|opus|wma)$/i.test(path))continue;
+    const base=path.split("/").pop().replace(/[<>:"/\\|?*\x00-\x1F]/g,"_");if(!base)continue;
+    const blob=await entry.async("blob");total+=blob.size;
+    if(blob.size>500*1024*1024||total>1024*1024*1024)throw new Error("解壓後檔案總量超過安全上限（單檔 500 MB、總量 1 GB）。");
+    if(blob.size)plain.push(new File([blob],base,{type:blob.type||"application/octet-stream"}));found++;
+   }
+   setStatus(found?("已從 ZIP 找到 "+found+" 個影音檔案："+zipFile.name):("ZIP 中沒有找到支援的影音檔案："+zipFile.name));
+  }catch(err){console.error(err);setStatus("ZIP 無法讀取："+(err?.message||String(err))+"。請確認壓縮檔完整，或先自行解壓後匯入。")}
+ }
+ selected=[...selected,...plain];selected=selected.filter((f,i,a)=>a.findIndex(x=>x.name===f.name&&x.size===f.size)===i);renderFiles();
+}
 $("pick").addEventListener("click",()=>picker.click());
 picker.addEventListener("change",()=>{addFiles(picker.files);picker.value=""});
 const dropzone=$("dropzone");
 ["dragenter","dragover"].forEach(type=>dropzone.addEventListener(type,e=>{e.preventDefault();e.stopPropagation();dropzone.classList.add("dragover")}));
 ["dragleave","drop"].forEach(type=>dropzone.addEventListener(type,e=>{e.preventDefault();e.stopPropagation();dropzone.classList.remove("dragover")}));
 dropzone.addEventListener("drop",e=>{const files=[...(e.dataTransfer?.files||[])];if(files.length)addFiles(files)});
-function isYouTubeUrl(url){return /(^|\.)((youtube\.com)|(youtu\.be)|(youtube-nocookie\.com)$/i.test(url.hostname)}
+function sourceInfo(url){
+ const host=url.hostname.toLowerCase().replace(/^www\./,"");
+ if(host==="youtube.com"||host==="m.youtube.com"||host==="youtu.be"||host==="youtube-nocookie.com")return {name:"YouTube",message:"YouTube 觀看網址不能直接匯入。若是自己的影片，請到 YouTube Studio 下載；其他影片請使用創作者提供的合法下載檔案。",link:"https://studio.youtube.com/",label:"開啟 YouTube Studio"};
+ if(host==="facebook.com"||host.endsWith(".facebook.com")||host==="fb.watch")return {name:"Facebook",message:"Facebook 分享頁面不是直接影音檔。自己的內容可從 Meta 帳號管理中心匯出資料；其他內容請使用創作者提供的下載檔案。",link:"https://accountscenter.facebook.com/info_and_permissions/",label:"開啟 Meta 帳號管理中心"};
+ if(host==="instagram.com"||host.endsWith(".instagram.com"))return {name:"Instagram",message:"Instagram 貼文或 Reels 網址不能直接當成影音檔。自己的內容可從帳號管理中心下載資料，再把 ZIP 匯入本工具。",link:"https://accountscenter.instagram.com/info_and_permissions/",label:"開啟 Instagram 帳號管理中心"};
+ if(host==="drive.google.com"||host==="docs.google.com")return {name:"Google Drive",message:"這看起來是 Google Drive 分享頁面。請確認你有檔案存取及下載權限；若分享頁面不能直接匯入，請先在 Drive 下載檔案，再選擇檔案或 ZIP 匯入。",link:"https://drive.google.com/",label:"開啟 Google Drive"};
+ return null;
+}
 function nameFromUrl(url){try{return decodeURIComponent(url.pathname.split("/").filter(Boolean).pop()||"download")}catch{return "download"}}
 $("importUrl").addEventListener("click",async()=>{
  const input=$("directUrl"),status=$("urlStatus"),button=$("importUrl");let url;
  try{url=new URL(input.value.trim())}catch{status.textContent="請貼上有效的完整網址。";return}
  if(url.protocol!=="https:"||url.username||url.password){status.textContent="為保護安全，僅接受不含帳密的 HTTPS 網址。";return}
- if(isYouTubeUrl(url)){status.textContent="這是 YouTube 觀看網址，不是直接影音檔案下載網址。請透過 YouTube 官方提供的下載方式取得檔案，再選擇或拖曳匯入。";return}
+ const info=sourceInfo(url);
+ if(info){const guide=$("sourceGuide");guide.classList.remove("hidden");guide.innerHTML="";const title=document.createElement("b");title.textContent=info.name+" 匯入指引";const msg=document.createElement("p");msg.textContent=info.message;const link=document.createElement("a");link.href=info.link;link.target="_blank";link.rel="noopener noreferrer";link.textContent=info.label;guide.append(title,msg,link);status.textContent="已辨識來源平台。請依官方方式取得你有權下載的影音檔，再匯入本工具。";return}
+ $("sourceGuide").classList.add("hidden");
  if(!$("rightsConfirm").checked){status.textContent="請先勾選確認你具有合法下載及轉換授權。";return}
  button.disabled=true;status.textContent="正在向來源網站請求檔案…";
  try{
@@ -54,7 +82,7 @@ $("importUrl").addEventListener("click",async()=>{
   let match=response.headers.get("content-disposition")?.match(/filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i);
   let filename=match?decodeURIComponent(match[1]||match[2]):nameFromUrl(url);
   if(!/\.[a-z0-9]{2,5}$/i.test(filename)){const ext=type.startsWith("audio/")?type.slice(6):type.startsWith("video/")?type.slice(6):"mp4";filename+=`.${ext}`}
-  addFiles([new File([blob],filename,{type:type||blob.type||"application/octet-stream"})]);
+  await addFiles([new File([blob],filename,{type:type||blob.type||"application/octet-stream"})]);
   status.textContent=`匯入成功：${filename}（${(blob.size/1024/1024).toFixed(1)} MB）。可在下方選擇輸出格式並轉換。`;input.value="";
  }catch(err){console.warn(err);status.textContent="無法直接匯入此網址："+(err?.message||String(err))+"。常見原因是來源未開放瀏覽器跨網域存取（CORS）、需要登入，或這不是檔案直連。請改由來源網站下載到裝置，再用上方選擇檔案或拖曳匯入。"}
  finally{button.disabled=false}
