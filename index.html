@@ -32,7 +32,7 @@ const dropzone=$("dropzone");
 ["dragenter","dragover"].forEach(type=>dropzone.addEventListener(type,e=>{e.preventDefault();e.stopPropagation();dropzone.classList.add("dragover")}));
 ["dragleave","drop"].forEach(type=>dropzone.addEventListener(type,e=>{e.preventDefault();e.stopPropagation();dropzone.classList.remove("dragover")}));
 dropzone.addEventListener("drop",e=>{const files=[...(e.dataTransfer?.files||[])];if(files.length)addFiles(files)});
-function isYouTubeUrl(url){return /(^|\\.)((youtube\\.com)|(youtu\\.be)|(youtube-nocookie\\.com)$/i.test(url.hostname)}
+function isYouTubeUrl(url){return /(^|\.)((youtube\.com)|(youtu\.be)|(youtube-nocookie\.com)$/i.test(url.hostname)}
 function nameFromUrl(url){try{return decodeURIComponent(url.pathname.split("/").filter(Boolean).pop()||"download")}catch{return "download"}}
 $("importUrl").addEventListener("click",async()=>{
  const input=$("directUrl"),status=$("urlStatus"),button=$("importUrl");let url;
@@ -51,9 +51,9 @@ $("importUrl").addEventListener("click",async()=>{
   const blob=await response.blob();
   if(!blob.size)throw new Error("下載到的檔案是空的。");
   if(blob.size>500*1024*1024)throw new Error("檔案超過 500 MB，請先使用來源網站下載，再從本機匯入。");
-  let match=response.headers.get("content-disposition")?.match(/filename\\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i);
+  let match=response.headers.get("content-disposition")?.match(/filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i);
   let filename=match?decodeURIComponent(match[1]||match[2]):nameFromUrl(url);
-  if(!/\\.[a-z0-9]{2,5}$/i.test(filename)){const ext=type.startsWith("audio/")?type.slice(6):type.startsWith("video/")?type.slice(6):"mp4";filename+=`.${ext}`}
+  if(!/\.[a-z0-9]{2,5}$/i.test(filename)){const ext=type.startsWith("audio/")?type.slice(6):type.startsWith("video/")?type.slice(6):"mp4";filename+=`.${ext}`}
   addFiles([new File([blob],filename,{type:type||blob.type||"application/octet-stream"})]);
   status.textContent=`匯入成功：${filename}（${(blob.size/1024/1024).toFixed(1)} MB）。可在下方選擇輸出格式並轉換。`;input.value="";
  }catch(err){console.warn(err);status.textContent="無法直接匯入此網址："+(err?.message||String(err))+"。常見原因是來源未開放瀏覽器跨網域存取（CORS）、需要登入，或這不是檔案直連。請改由來源網站下載到裝置，再用上方選擇檔案或拖曳匯入。"}
